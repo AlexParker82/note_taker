@@ -16,7 +16,7 @@ notes.post('/', (req, res) => {
         const newNote = {
             title,
             text,
-            note_id: uuidv4(),
+            id: uuidv4(),
         };
 
         fs.readFile('./db/db.json').then((data) => {
@@ -41,13 +41,13 @@ notes.post('/', (req, res) => {
 
 });
 
-notes.delete('/:note_id', (req, res) => {
-    const noteId = req.params.note_id;
+notes.delete('/:id', (req, res) => {
+    const noteId = req.params.id;
 
     fs.readFile('./db/db.json')
     .then((data) => JSON.parse(data))
     .then((json) => {
-        const notesResult = json.filter((note) => note.note_id !== noteId);
+        const notesResult = json.filter((note) => note.id !== noteId);
 
         fs.writeFile('./db/db.json', JSON.stringify(notesResult, null, 4))
         .then(res.json(`Note ${noteId} has been deleted`))
