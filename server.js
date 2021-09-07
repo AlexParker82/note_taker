@@ -4,28 +4,29 @@ const path = require('path');
 const app = express();
 const PORT = process.env.port || 3001;
 
-const api = require('./routes/notes');
+const notes = require('./routes/notes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use('/api/notes', notes);
 app.use(express.static('public'));
 
-app.use('/api', api);
 
 app.get('/notes', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/notes.html'));
 });
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/index.html'));
 });
-
-
 
 app.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT} 🚀`)
 });
+
+
+
 
 
 
