@@ -1,7 +1,6 @@
 const notes = require('express').Router();
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs/promises');
-const e = require('express');
 
 notes.get('/', (req, res) => {
     fs.readFile('./db/db.json').then((data) => {
