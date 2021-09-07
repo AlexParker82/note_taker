@@ -11,7 +11,6 @@ notes.get('/', (req, res) => {
 
 notes.post('/', (req, res) => {
     const { title, text } = req.body;
-    let noteArray = [];
 
     if (title && text) {
         const newNote = {
@@ -20,24 +19,29 @@ notes.post('/', (req, res) => {
             note_id: uuidv4(),
         };
 
-        noteArray.push(newNote);
+        fs.readFile('./db/db.json').then((data) => {
+            const parsedNote = JSON.parse(data);
 
-        //const arrayString = JSON.stringify(noteArray);
+            parsedNote.push(newNote);
 
-        fs.writeFile('./db/db.json', noteArray)
+            fs.writeFile('./db/db.json', JSON.stringify(parsedNote, null, 4))
+            .catch((err) => console.error(err));
+        })
         .catch((err) => console.error(err));
 
-        const response ={
+        const response = {
             status: 'success',
-            body: arrayString
+            body: newNote,
         };
 
-        res.json(response);
+        console.info(response);
+        res.status(200).json(response);
 
-
-    } else console.info('Need title and text')
+    } else res.status(400).json('Error creating note');
 
 });
 
 module.exports = notes;
+
+
 
